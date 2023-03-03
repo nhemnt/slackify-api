@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { createSlackBlocks, normalizeOGData } from 'src/lib/utils';
+import {
+  createSlackBlocks,
+  isValidHttpUrl,
+  normalizeOGData,
+} from '../lib/utils';
 
 interface UrlData {
   url: string;
@@ -27,6 +31,13 @@ interface OpenGraphData {
   requestUrl?: string;
 }
 
+interface NormalizedOGData {
+  title?: string;
+  url?: string;
+  description?: string;
+  image?: string;
+  ogSiteName?: string;
+}
 @Injectable()
 export class TrendsService {
   async create(json: JsonData) {
@@ -71,12 +82,17 @@ export class TrendsService {
           });
 
           // Filter out unwanted domains from OpenGraph data
-          const filteredData = data.filter((str) => {
-            const url = str.ogUrl || '';
-            const siteName = str.ogSiteName || '';
-            return !excludeDomainRegex.test(url || siteName);
-          });
-          const blocks = createSlackBlocks(filteredData.map(normalizeOGData));
+          const filteredData = data
+            .map(normalizeOGData)
+            .filter((str: NormalizedOGData) => {
+              const url = str.url || '';
+              const siteName = str.ogSiteName || '';
+              const imageUrl = str.image || '';
+              if (url && !isValidHttpUrl(url)) return false;
+              if (imageUrl && !isValidHttpUrl(imageUrl)) return false;
+              return !excludeDomainRegex.test(url || siteName);
+            });
+          const blocks = createSlackBlocks(filteredData);
 
           if (WEBHOOK_URI) {
             try {

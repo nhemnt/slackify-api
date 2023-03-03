@@ -14,6 +14,7 @@ interface NormalizedOGData {
   url?: string;
   description?: string;
   image?: string;
+  ogSiteName?: string;
 }
 
 // This function normalizes the OpenGraph data
@@ -26,6 +27,7 @@ export const normalizeOGData = (ogData: OpenGraphData): NormalizedOGData => {
     twitterImage,
     twitterDescription,
     requestUrl,
+    ogSiteName,
   } = ogData;
 
   const image =
@@ -37,6 +39,7 @@ export const normalizeOGData = (ogData: OpenGraphData): NormalizedOGData => {
     url: ogUrl || requestUrl,
     description: ogDescription || twitterDescription,
     image,
+    ogSiteName,
   };
 };
 
@@ -61,43 +64,55 @@ export const createSlackBlocks = (data: NormalizedOGData[]) => {
   ];
   data.forEach((item: NormalizedOGData) => {
     const { title, url, description, image } = item;
-    if (blocks.length > 40) return blocks;
-    if (image && !image.includes('.svg')) {
-      blocks.push({
-        type: 'image',
-        title: {
-          type: 'plain_text',
-          text: title,
-          emoji: true,
-        },
-        image_url: encodeURI(image),
-        alt_text: title,
-      });
-    }
 
-    if (description) {
-      blocks.push({
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text: `*${title}* \n\n${description} \n\n`,
-        },
-        accessory: {
-          type: 'button',
-          text: {
+    if (blocks.length > 40) return blocks;
+    if (title || description || image) {
+      if (image && !image.includes('.svg')) {
+        blocks.push({
+          type: 'image',
+          title: {
             type: 'plain_text',
-            text: 'Read More',
+            text: title,
             emoji: true,
           },
-          url: encodeURI(url),
-          action_id: 'button-action',
-        },
-      });
-    }
+          image_url: encodeURI(image),
+          alt_text: title,
+        });
+      }
 
-    blocks.push({
-      type: 'divider',
-    });
+      if (description) {
+        blocks.push({
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*${title}* \n\n${description} \n\n`,
+          },
+          accessory: {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Read More',
+              emoji: true,
+            },
+            url: encodeURI(url || ''),
+            action_id: 'button-action',
+          },
+        });
+        blocks.push({
+          type: 'divider',
+        });
+      }
+    }
   });
   return blocks;
 };
+
+export function isValidHttpUrl(string) {
+  let url;
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === 'http:' || url.protocol === 'https:';
+}
