@@ -6,9 +6,10 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 
 import { LoggerMiddleware } from './logger.middleware';
 import { TrendsModule } from './trends/trends.module';
+import { CheckInOutModule } from './check-in-out/check-in-out.module';
 
 @Module({
-  imports: [envModule, TrendsModule],
+  imports: [envModule, TrendsModule, CheckInOutModule],
   controllers: [],
   providers: [],
 })
