@@ -19,7 +19,14 @@ export class CheckInOutService {
   async create(createCheckInOutDto) {
     return new Promise(async (resolve) => {
       try {
-        console.log(createCheckInOutDto);
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          return {
+            data: 'Weekend!',
+          };
+        }
+
         const morningPunchInMessage =
           "@channel Rise and shine, sleepyhead! It's time to check in and start your day. :doge_dance:";
 

@@ -7,11 +7,22 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { LoggerMiddleware } from './logger.middleware';
 import { TrendsModule } from './trends/trends.module';
 import { CheckInOutModule } from './check-in-out/check-in-out.module';
+import { ProblemsModule } from './problems/problems.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron/cron.service';
+import { ProblemsService } from './problems/problems.service';
+import { CheckInOutService } from './check-in-out/check-in-out.service';
 
 @Module({
-  imports: [envModule, TrendsModule, CheckInOutModule],
+  imports: [
+    envModule,
+    ScheduleModule.forRoot(),
+    TrendsModule,
+    CheckInOutModule,
+    ProblemsModule,
+  ],
   controllers: [],
-  providers: [],
+  providers: [CronService, ProblemsService, CheckInOutService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
