@@ -1,73 +1,66 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Slackify API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Slackify API is a web application built with NestJS, Prisma, Supabase DB, and Slack API. This application is designed to post messages to your Slack channel automatically based on various features.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
+- Custom Notification: You can push custom notifications to your Slack channel.
+- Weekly Trending Topic of React: Get weekly trending topics of React.
+- Daily Fun and Programming Quiz: Test your programming knowledge with daily quizzes including - topics like Node.js, React.js, and JavaScript.
+- Daily Alert for Check-In and Check-Out: Get daily reminders for check-in and check-out.
 
-## Description
+## Technologies Used
+- NestJS: https://nestjs.com/
+- Prisma: https://www.prisma.io/
+- Supabase DB: https://supabase.com/
+- Slack API: https://api.slack.com/messaging/webhooks
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
+To get started with the Slackify API, you will need to create a new Slack app and obtain a Bot User OAuth Access Token. You will also need to create a Supabase account and obtain an API key. Once you have these credentials, you can follow the steps below:
 
-## Installation
+1. Clone the repository to your local machine.
 
-```bash
-$ yarn install
+```
+git clone https://github.com/your-username/slackify-api.git
 ```
 
-## Running the app
+2. Install dependencies.
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```
+cd slackify-api
+yarn
 ```
 
-## Test
+3. Create a .env file in the root directory of the project and add the following environment variables.
 
-```bash
-# unit tests
-$ yarn run test
+```
+API_SECRET_KEY=
 
-# e2e tests
-$ yarn run test:e2e
+EXCLUDED_LIST = '["@gmail","Retweet"]'
+EXCLUDED_DOMAIN = '["twitter","youtube","github"]'
+WEBHOOK_URI= 
 
-# test coverage
-$ yarn run test:cov
+# PunchInOut channel
+WEBHOOK_URI_PUNCH_IN_OUT=
+
+
+DIRECT_URL=""
+DATABASE_URL=""
 ```
 
-## Support
+4. Run the application.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+yarn start:dev
+```
 
-## Stay in touch
+5. Navigate to http://localhost:8081/docs to access the Swagger UI documentation and test the API endpoints.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute to this project, please fork the repository and create a new branch for your feature or bug fix. Once you've made your changes, submit a pull request and we'll review your code.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the [MIT License](https://github.com/nhemnt/slackify-api/blob/main/LICENSE). Feel free to use, modify, and distribute this code as you see fit.
+
