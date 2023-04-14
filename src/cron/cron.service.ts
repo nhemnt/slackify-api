@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { CheckInOutService } from 'src/check-in-out/check-in-out.service';
-import { ProblemsService } from 'src/problems/problems.service';
+import { ProblemsService, QUIZ } from 'src/problems/problems.service';
 
 @Injectable()
 export class CronService {
@@ -28,13 +28,14 @@ export class CronService {
   questionListCron() {
     const now = new Date();
     console.log(`Question list cron job ran at ${now}`);
-    this.problemsService.get();
+    this.problemsService.get(QUIZ.REACT);
   }
 
-  // @Cron('*/10 * * * * *')
-  // runEvery10Seconds() {
-  //   const now = new Date();
-  //   console.log(`cron job ran at ${now}`);
-  //   console.log('Every 10 seconds');
-  // }
+  //   @Cron('*/10 * * * * *')
+  //   runEvery10Seconds() {
+  //     const now = new Date();
+  //     this.problemsService.get(QUIZ.REACT);
+  //     console.log(`cron job ran at ${now}`);
+  //     console.log('Every 10 seconds');
+  //   }
 }

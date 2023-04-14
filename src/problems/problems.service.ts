@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import * as reactQuestions from './Questions/react.json';
+import { PrismaService } from '../prisma.service';
+import { capitalizeFirstLetter } from 'src/lib/utils';
+
+export const QUIZ = {
+  REACT: 'react',
+  NODE: 'node',
+  JAVASCRIPT: 'javascript',
+};
 
 const emojis = [
   ':fire:',
@@ -13,8 +20,36 @@ const emojis = [
   ':raised_back_of_hand:',
 ];
 
-export const createSlackBlocks = (msg: string) => {
+function getRandomEmoji() {
+  const funnyEmojis = [
+    ':doge_dance:',
+    ':aw_yeah:',
+    ':doge-inception:',
+    ':busy:',
+    ':shipitparrot:',
+    ':gigachad-typing:',
+    ':3445-soyboy:',
+    ':abeleaves:',
+    ':amongus:',
+    ':android-dance:',
+    ':aussiecongaparrot:',
+    ':dabparrot:',
+    ':blobdance:',
+  ];
+  const randomIndex = Math.floor(Math.random() * funnyEmojis.length);
+  return funnyEmojis[randomIndex];
+}
+
+export const createSlackBlocks = (msg: string, topic: string) => {
   const blocks: any = [
+    {
+      type: 'section',
+      text: {
+        type: 'plain_text',
+        text: `${capitalizeFirstLetter(topic)} Quiz ${getRandomEmoji()}`,
+        emoji: true,
+      },
+    },
     {
       type: 'context',
       elements: [
@@ -33,15 +68,11 @@ const endline = `Please use the appropriate emoji to indicate your selection of 
 @Injectable()
 export class ProblemsService {
   questionIndex: number;
-  constructor() {
+  constructor(private prisma: PrismaService) {
     this.questionIndex = 0;
   }
 
-  async create() {
-    return { data: reactQuestions };
-  }
-
-  async get() {
+  async get(topic: string) {
     const today = new Date();
     const dayOfWeek = today.getDay();
 
@@ -50,7 +81,13 @@ export class ProblemsService {
         data: "Congratulations, today is a weekend day! That means you get a break from our relentless questioning. Go forth and enjoy your well-deserved rest. We'll be back on Monday to challenge your brain cells again!",
       };
     }
-    const data = reactQuestions[this.questionIndex];
+    const quiz = await this.prisma.quiz.findUnique({
+      where: {
+        name: topic,
+      },
+    });
+    const { data: quizData, index } = quiz;
+    const data = quizData[index];
     if (!data) {
       return {
         data: 'Something Went Wrong!',
@@ -68,12 +105,20 @@ export class ProblemsService {
 
       markDown += `\n\n${endline}`;
       const { WEBHOOK_URI } = process.env;
+
       if (WEBHOOK_URI) {
         try {
           await axios.post(WEBHOOK_URI, {
-            blocks: createSlackBlocks(markDown),
+            blocks: createSlackBlocks(markDown, topic),
           });
-          this.questionIndex++;
+          await this.prisma.quiz.update({
+            where: {
+              name: topic,
+            },
+            data: {
+              index: index + 1,
+            },
+          });
           return { message: 'ok' };
         } catch (err) {
           return { error: 'Invalid block data' };
@@ -84,12 +129,5 @@ export class ProblemsService {
         data: 'Something Went Wrong!',
       };
     }
-  }
-
-  async updateIndex(index: number) {
-    this.questionIndex = index;
-    return {
-      data: 'ok',
-    };
   }
 }

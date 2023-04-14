@@ -12,6 +12,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CronService } from './cron/cron.service';
 import { ProblemsService } from './problems/problems.service';
 import { CheckInOutService } from './check-in-out/check-in-out.service';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { CheckInOutService } from './check-in-out/check-in-out.service';
     ProblemsModule,
   ],
   controllers: [],
-  providers: [CronService, ProblemsService, CheckInOutService],
+  providers: [CronService, ProblemsService, CheckInOutService, PrismaService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
