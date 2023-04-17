@@ -25,16 +25,23 @@ export class CronService {
   }
 
   @Cron('30 7 * * *')
-  questionListCron() {
+  reactQuestionListCron() {
     const now = new Date();
-    console.log(`Question list cron job ran at ${now}`);
+    console.log(`reactQuestionList cron job ran at ${now}`);
     this.problemsService.get(QUIZ.REACT);
+  }
+
+  @Cron('30 9 * * *')
+  javascriptQuestionListCron() {
+    const now = new Date();
+    console.log(`javascriptQuestionList cron job ran at ${now}`);
+    this.problemsService.get(QUIZ.JAVASCRIPT);
   }
 
   //   @Cron('*/10 * * * * *')
   //   runEvery10Seconds() {
   //     const now = new Date();
-  //     this.problemsService.get(QUIZ.REACT);
+  //     this.problemsService.get(QUIZ.NODE);
   //     console.log(`cron job ran at ${now}`);
   //     console.log('Every 10 seconds');
   //   }

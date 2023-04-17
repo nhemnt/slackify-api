@@ -3,10 +3,10 @@
 Slackify API is a web application built with NestJS, Prisma, Supabase DB, and Slack API. This application is designed to post messages to your Slack channel automatically based on various features.
 
 ## Features
-- Custom Notification: You can push custom notifications to your Slack channel.
-- Weekly Trending Topic of React: Get weekly trending topics of React.
-- Daily Fun and Programming Quiz: Test your programming knowledge with daily quizzes including - topics like Node.js, React.js, and JavaScript.
-- Daily Alert for Check-In and Check-Out: Get daily reminders for check-in and check-out.
+- Custom Notification
+- Weekly Trending Topic of React
+- Daily Fun and Programming Quiz
+- Daily Alert for Check-In and Check-Out
 
 ## Technologies Used
 - NestJS: https://nestjs.com/
@@ -20,7 +20,7 @@ To get started with the Slackify API, you will need to create a new Slack app an
 1. Clone the repository to your local machine.
 
 ```
-git clone https://github.com/your-username/slackify-api.git
+git clone https://github.com/nhemnt/slackify-api.git
 ```
 
 2. Install dependencies.

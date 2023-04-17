@@ -7,6 +7,7 @@ export const QUIZ = {
   REACT: 'react',
   NODE: 'node',
   JAVASCRIPT: 'javascript',
+  SPRING_FRAMEWORK: 'spring-framework',
 };
 
 const emojis = [
@@ -46,7 +47,9 @@ export const createSlackBlocks = (msg: string, topic: string) => {
       type: 'section',
       text: {
         type: 'plain_text',
-        text: `${capitalizeFirstLetter(topic)} Quiz ${getRandomEmoji()}`,
+        text: `${capitalizeFirstLetter(
+          topic.replace('-', ' '),
+        )} Quiz ${getRandomEmoji()}`,
         emoji: true,
       },
     },
