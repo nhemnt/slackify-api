@@ -13,6 +13,7 @@ import { CronService } from './cron/cron.service';
 import { ProblemsService } from './problems/problems.service';
 import { CheckInOutService } from './check-in-out/check-in-out.service';
 import { PrismaService } from './prisma.service';
+import { HealthModule } from './heath/health.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PrismaService } from './prisma.service';
     TrendsModule,
     CheckInOutModule,
     ProblemsModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [CronService, ProblemsService, CheckInOutService, PrismaService],

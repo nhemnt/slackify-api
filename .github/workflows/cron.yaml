@@ -1,0 +1,13 @@
+name: status-check-to-make-server-up
+on:
+  schedule:
+    - cron: '*/13 * * * *'
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stutus Check
+        run: |
+          curl --request GET \
+          --url '{{ secrets.API_ENDPOINT }}/api/health' \
+          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
