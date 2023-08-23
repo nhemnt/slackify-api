@@ -93,16 +93,15 @@ export class TrendsService {
               return !excludeDomainRegex.test(url || siteName);
             });
           const blocks = await createSlackBlocks(filteredData);
-          console.log("bocks");
-          // if (WEBHOOK_URI) {
-          //   try {
-          //     await axios.post(WEBHOOK_URI, {
-          //       blocks: blocks,
-          //     });
-          //   } catch (err) {
-          //     resolve({ error: 'Invalid block data', blocks });
-          //   }
-          // }
+          if (WEBHOOK_URI) {
+            try {
+              await axios.post(WEBHOOK_URI, {
+                blocks: blocks,
+              });
+            } catch (err) {
+              resolve({ error: 'Invalid block data', blocks });
+            }
+          }
 
           // Send response with normalized OpenGraph data
           resolve({ result: blocks });
