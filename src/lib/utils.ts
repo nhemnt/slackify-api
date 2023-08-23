@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 interface OpenGraphData {
   ogTitle?: string;
   ogUrl?: string;
@@ -48,63 +50,79 @@ export const normalizeOGData = (ogData: OpenGraphData): NormalizedOGData => {
  * @param data An array of NormalizedOGData objects
  * @returns An array of Slack block objects
  */
-export const createSlackBlocks = (data: NormalizedOGData[]) => {
-  const blocks: any = [
-    {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: 'Stay Informed with the Top Stories of the Week 😎',
-        emoji: true,
+export const createSlackBlocks = async (data: NormalizedOGData[]) => {
+  return new Promise(async (resolve) => {
+    const blocks: any = [
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: 'Stay Informed with the Top Stories of the Week 😎',
+          emoji: true,
+        },
       },
-    },
-    {
-      type: 'divider',
-    },
-  ];
-  data.forEach((item: NormalizedOGData) => {
-    const { title, url, description, image } = item;
+      {
+        type: 'divider',
+      },
+    ];
+    async function processItems() {
+      for (const item of data) {
+        const { title, url, description, image } = item;
 
-    if (blocks.length > 40) return blocks;
-    if (title || description || image) {
-      if (image && !image.includes('.svg')) {
-        blocks.push({
-          type: 'image',
-          title: {
-            type: 'plain_text',
-            text: title,
-            emoji: true,
-          },
-          image_url: encodeURI(image),
-          alt_text: title,
-        });
+        if (blocks.length > 40) return blocks;
+        if (title || description || image) {
+          if (image && !image.includes('.svg')) {
+            try {
+              const response = await axios(encodeURI(image));
+              if (response.status === 200) {
+                blocks.push({
+                  type: 'image',
+                  title: {
+                    type: 'plain_text',
+                    text: title,
+                    emoji: true,
+                  },
+                  image_url: encodeURI(image),
+                  alt_text: title,
+                });
+              }
+            } catch (err) {
+              // no need to handle
+            }
+          }
+
+          if (description) {
+            blocks.push({
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*${title}* \n\n${description} \n\n`,
+              },
+              accessory: {
+                type: 'button',
+                text: {
+                  type: 'plain_text',
+                  text: 'Read More',
+                  emoji: true,
+                },
+                url: encodeURI(url || ''),
+                action_id: 'button-action',
+              },
+            });
+            blocks.push({
+              type: 'divider',
+            });
+          }
+        }
       }
 
-      if (description) {
-        blocks.push({
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `*${title}* \n\n${description} \n\n`,
-          },
-          accessory: {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Read More',
-              emoji: true,
-            },
-            url: encodeURI(url || ''),
-            action_id: 'button-action',
-          },
-        });
-        blocks.push({
-          type: 'divider',
-        });
-      }
+      return blocks;
     }
+
+    // Call the async function
+    const result = await processItems();
+    resolve(result);
   });
-  return blocks;
 };
 
 export function isValidHttpUrl(string) {
