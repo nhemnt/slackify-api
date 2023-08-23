@@ -8,6 +8,4 @@ jobs:
     steps:
       - name: Stutus Check
         run: |
-          curl --request GET \
-          --url '${{ secrets.API_ENDPOINT }}/api/health' \
-          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
+          curl --request GET --url '${{ secrets.API_ENDPOINT }}/api/health' --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
